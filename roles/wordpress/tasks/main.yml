@@ -14,7 +14,7 @@
 
 - name: Set execute bits on WP-CLI
   run_once: true
-  command: chmod 755 /usr/local/bin/wp
+  command: chmod 755 /usr/local/bin/wp warn=false
 
 - name: "Provision WP Database"
   mysql_db: name="{{ wp_db }}" state=present login_unix_socket=/var/run/mysqld/mysqld.sock
