@@ -7,10 +7,12 @@ apache_hostname: "{{inventory_hostname}}"
 wp_repo: "git@github.com:focusmx/wordpress_clone.git"
 github_key_path: "/root/.ssh/id_rsa.github"
 
-wp_db: test111
-wp_db_user: test111
-wp_db_password: test111
+wp_db: test222
+wp_db_user: test222
+wp_db_password: test222
 wp_host: localhost
 wp_dump: wordpress_demo.sql
 wp_old_url: www.demotesturl.net
 
+dev_host: localhost
+dev_path: /var/www/test111

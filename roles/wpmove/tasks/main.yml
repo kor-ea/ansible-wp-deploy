@@ -1,0 +1,60 @@
+---
+- name: "Export DB on {{dev_host}}"
+  command: /usr/local/bin/wp db export {{wp_dump}}
+  delegate_to: "{{dev_host}}"
+  become: true
+  become_user: www-data
+  args:
+      chdir: "{{dev_path}}"
+
+- name: Transfer files from dev to prod
+  synchronize:
+   src: "{{dev_path}}/"
+   dest: "/var/www/{{apache_hostname}}/"
+  delegate_to: "{{dev_host}}"
+
+
+- name: Installing MariaDB deps for MySQL-Python
+  package: name=libmariadb-client-lgpl-dev
+
+- name: Link to mysql_config
+  file: src=/usr/bin/mariadb_config dest=/usr/bin/mysql_config state=link
+
+- name: Ensure the MySQL-Python is installed.
+  pip: name=MySQL-python
+
+- name: Install WP-CLI
+  run_once: true
+  command: curl https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /usr/local/bin/wp warn=false
+
+- name: Set execute bits on WP-CLI
+  run_once: true
+  command: chmod 755 /usr/local/bin/wp warn=false
+
+- name: "Provision WP Database"
+  mysql_db: name="{{ wp_db }}" state=present login_unix_socket=/var/run/mysqld/mysqld.sock
+
+- name: "Grant WP user access to WP DB"
+  mysql_user: name="{{ wp_db_user }}" priv="{{ wp_db }}.*:ALL" host="localhost" password={{ wp_db_password }} state=present login_unix_socket=/var/run/mysqld/mysqld.sock
+
+- name: Fetch random salts for WordPress config
+  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  register: "wp_salt"
+
+- name: "Create wp-config for {{ enviro }}"
+  template: src=wp/wp-config.php dest=/var/www/{{apache_hostname }}/wp-config.php owner=www-data group=www-data
+
+
+- name: "Import DB"
+  command: /usr/local/bin/wp db import {{wp_dump}}
+  become: true
+  become_user: www-data
+  args:
+      chdir: "/var/www/{{apache_hostname }}"
+
+- name: "Search-replace URL"
+  command: /usr/local/bin/wp search-replace {{wp_old_url}} {{apache_hostname}}
+  become: true
+  become_user: www-data
+  args:
+      chdir: "/var/www/{{apache_hostname }}"
