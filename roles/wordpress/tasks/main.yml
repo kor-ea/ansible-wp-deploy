@@ -32,20 +32,20 @@
   when: not wp_exists.stat.exists
 
 - name: "Create wp-config for {{ enviro }}"
-  template: src=wp/wp-config.php dest=/var/www/{{apache_hostname }}/wp-config.php owner=www-data group=www-data
+  template: src=wp/wp-config.php dest=/var/www/{{apache_hostname }}/wp-config.php owner={{apache_owner}} group={{apache_group}}
   when: not wp_exists.stat.exists
 
 
 - name: "Import DB"
   command: /usr/local/bin/wp db import {{wp_dump}}
   become: true
-  become_user: www-data
+  become_user: "{{apache_owner}}"
   args:
       chdir: "/var/www/{{apache_hostname }}"
 
 - name: "Search-replace URL"
   command: /usr/local/bin/wp search-replace {{wp_old_url}} {{apache_hostname}}
   become: true
-  become_user: www-data
+  become_user: "{{apache_owner}}"
   args:
       chdir: "/var/www/{{apache_hostname }}"

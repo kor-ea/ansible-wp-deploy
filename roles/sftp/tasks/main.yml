@@ -1,0 +1,6 @@
+- user:
+    name: "{{sftp_user}}"
+    password: "{{sftp_password}}"
+    shell: "{{sftp_user_shell}}"
+    groups: "{{sftp_groups}}"
+  when: create_sftp_user

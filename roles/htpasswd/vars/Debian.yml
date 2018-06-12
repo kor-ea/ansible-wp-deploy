@@ -7,6 +7,6 @@ htpasswd_credentials:
     name: "{{apache_auth_user}}"
     password: "{{apache_auth_passwd}}"
     owner: root
-    group: www-data
+    group: "{{apache_group}}"
     mode: 640
 

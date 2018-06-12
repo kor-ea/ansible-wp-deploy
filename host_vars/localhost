@@ -3,6 +3,8 @@ apache_passwdfile: "/etc/apache2/htpasswd"
 apache_auth_user: test
 apache_auth_passwd: test
 apache_hostname: test111.aerohosting.pro
+apache_owner: www-data
+apache_group: www-data
 
 wp_repo: "git@github.com:focusmx/wordpress_clone.git"
 github_key_path: "/root/.ssh/id_rsa.github"

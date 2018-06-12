@@ -3,7 +3,7 @@
   command: /usr/local/bin/wp db export {{wp_dump}}
   delegate_to: "{{dev_host}}"
   become: true
-  become_user: www-data
+  become_user: "{{apache_owner}}"
   args:
       chdir: "{{dev_path}}"
 
@@ -13,6 +13,8 @@
    dest: "/var/www/{{apache_hostname}}/"
   delegate_to: "{{dev_host}}"
 
+- name: Set owner and mode for documentroot
+  file: dest=/var/www/{{apache_hostname }} owner={{apache_owner}} group={{apache_group}} mode=u=rwX,g=rX,o=rX recurse=yes
 
 - name: Installing MariaDB deps for MySQL-Python
   package: name=libmariadb-client-lgpl-dev
@@ -41,20 +43,20 @@
   local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
   register: "wp_salt"
 
-- name: "Create wp-config for {{ enviro }}"
+- name: "Create wp-config for {{ apache_hostname }}"
   template: src=wp/wp-config.php dest=/var/www/{{apache_hostname }}/wp-config.php owner=www-data group=www-data
 
 
 - name: "Import DB"
   command: /usr/local/bin/wp db import {{wp_dump}}
   become: true
-  become_user: www-data
+  become_user: "{{apache_owner}}"
   args:
       chdir: "/var/www/{{apache_hostname }}"
 
 - name: "Search-replace URL"
   command: /usr/local/bin/wp search-replace {{wp_old_url}} {{apache_hostname}}
   become: true
-  become_user: www-data
+  become_user: "{{apache_owner}}"
   args:
       chdir: "/var/www/{{apache_hostname }}"

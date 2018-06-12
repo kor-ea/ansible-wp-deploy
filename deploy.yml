@@ -6,3 +6,4 @@
     - certbot
     - apache
     - htpasswd
+    - { role: sftp, tags: sftp}

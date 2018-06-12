@@ -4,8 +4,8 @@
   template:
     src: "{{ apache_htaccess_template }}"
     dest: "/var/www/{{ apache_hostname }}/.htaccess"
-    owner: www-data
-    group: www-data
+    owner: "{{apache_owner}}"
+    group: "{{apache_group}}"
     mode: 0644
   when: apache_htaccess
 

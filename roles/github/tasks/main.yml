@@ -18,6 +18,6 @@
   when: not wp_installed.stat.exists
 
 - name: Set owner and mode for documentroot
-  file: dest=/var/www/{{apache_hostname }} owner=www-data group=www-data mode=u=rwX,g=rX,o=rX recurse=yes
+  file: dest=/var/www/{{apache_hostname }} owner={{apache_owner}} group={{apache_group}} mode=u=rwX,g=rX,o=rX recurse=yes
 
 
