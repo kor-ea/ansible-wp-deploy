@@ -1,0 +1,10 @@
+- hosts: localhost
+  vars_files:
+    - vars/main.yml
+  roles:
+    - github
+    - { role: apache }
+    - certbot
+    - apache
+    - htpasswd
+    - { role: wordpress, tags: wp}

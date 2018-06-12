@@ -1,0 +1,27 @@
+---
+apache_vhosts_filename: "{{ apache_hostname }}"
+apache_vhosts_template: "vhosts.conf.j2"
+apache_htaccess: true
+apache_htaccess_template: "htaccess.j2"
+phpfpm_socket: "proxy:unix:/var/run/php/php7.2-fpm.sock|fcgi://localhost/"
+
+apache_vhosts:
+  # Additional properties:
+  # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
+  - servername: "{{ apache_hostname }} "
+    serveralias: "www.{{apache_hostname}} "
+    documentroot: "/var/www/{{apache_hostname}}"
+
+apache_allow_override: "All"
+apache_options: "-Indexes +FollowSymLinks"
+
+apache_vhosts_ssl:
+   - servername: "{{apache_hostname}}"
+     serveralias: "www.{{apache_hostname}}"
+     documentroot: "/var/www/{{apache_hostname}}"
+     certificate_file: "/etc/letsencrypt/live/{{apache_hostname}}/fullchain.pem"
+     certificate_key_file: "/etc/letsencrypt/live/{{apache_hostname}}/privkey.pem"
+
+apache_ignore_missing_ssl_certificate: false
+
+

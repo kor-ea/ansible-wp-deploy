@@ -1,0 +1,23 @@
+- name: configure ssh to use ansible key for github.com
+  template: >
+    src=templates/config.j2
+    dest=/root/.ssh/config
+    owner=root
+    group=root
+    mode=0644
+
+- name: Check whether documentroot already installed.
+  stat: "path=/var/www/{{ apache_hostname}}"
+  register: wp_installed
+
+- name: clone a private repository
+  git: >
+    repo="{{wp_repo}}"
+    key_file="{{github_key_path}}"
+    dest="/var/www/{{apache_hostname}}/"
+  when: not wp_installed.stat.exists
+
+- name: Set owner and mode for documentroot
+  file: dest=/var/www/{{apache_hostname }} owner=www-data group=www-data mode=u=rwX,g=rX,o=rX recurse=yes
+
+

@@ -1,0 +1,9 @@
+AuthType Basic
+AuthName "Apache with basic auth."
+AuthUserFile {{apache_passwdfile}}
+Require valid-user
+
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} .*$
+RewriteRule ^wordpress_demo/(.*)$ https://{{apache_hostname}}/$1 [L,QSA,R=301]
