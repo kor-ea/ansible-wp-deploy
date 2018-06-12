@@ -1,0 +1,12 @@
+---
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{apache_hostname}}/cert.pem
+  register: letsencrypt_cert
+
+- name: Generate new certificate if one doesn't exist.
+  shell: "{{ certbot_create_command }}"
+  when: not letsencrypt_cert.stat.exists
+  notify: restart apache
+
+

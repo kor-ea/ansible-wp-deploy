@@ -1,0 +1,10 @@
+---
+- import_tasks: include-vars.yml
+
+- include_tasks: create-cert-standalone.yml
+  when:
+    - certbot_create_if_missing
+    - certbot_create_method == 'standalone'
+
+- import_tasks: renew-cron.yml
+  when: certbot_auto_renew

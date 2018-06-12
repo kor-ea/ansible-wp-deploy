@@ -1,0 +1,12 @@
+---
+htpasswd_required_packages:
+  - apache2-utils
+  - python-passlib
+htpasswd_credentials:
+  - path: "{{apache_passwdfile}}"
+    name: "{{apache_auth_user}}"
+    password: "{{apache_auth_passwd}}"
+    owner: root
+    group: www-data
+    mode: 640
+
