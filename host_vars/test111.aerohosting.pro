@@ -1,9 +1,9 @@
 ---
 apache_passwdfile: "/etc/apache2/htpasswd"
-apache_auth_user: test
-apache_auth_passwd: test
+apache_auth_user: test1
+apache_auth_passwd: test1
 apache_hostname: "{{inventory_hostname}}"
-apache_owner: www-data
+apache_owner: testuser
 apache_group: www-data
 
 wp_repo: "git@github.com:focusmx/wordpress_clone.git"
