@@ -1,9 +1,9 @@
 ---
 - hosts: prod
   roles:
+    - { role: sftp, tags: sftp}
     - { role: wpmove, tags: wp}
     - { role: apache }
     - certbot
     - apache
     - htpasswd
-    - { role: sftp, tags: sftp}

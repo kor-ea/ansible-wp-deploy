@@ -1,9 +1,7 @@
 ---
 - name: "Export DB on {{dev_host}}"
-  command: /usr/local/bin/wp db export {{wp_dump}}
+  command: /usr/local/bin/wp --allow-root db export {{wp_dump}}
   delegate_to: "{{dev_host}}"
-  become: true
-  become_user: "{{apache_owner}}"
   args:
       chdir: "{{dev_path}}"
 
